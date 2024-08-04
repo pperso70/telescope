@@ -486,7 +486,7 @@
         };
         
         socket.onmessage = function(event) {
-            // if (event.data.length < 100) {
+             if (event.data.length < 1000) {
             //if (typeof event.data === 'string') {
                
                 const data = JSON.parse(event.data);
@@ -524,7 +524,7 @@
 
 
 
-              /*  }
+                }
             } else {
                 //console.log("Image reçue, taille:", event.data.length, "bytes");
 
@@ -542,7 +542,7 @@
                     URL.revokeObjectURL(this.src);
                 }
 
-                */
+                
             }
             
         };
