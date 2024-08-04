@@ -1,0 +1,652 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP telescope</title>
+    <!--commentaire HTML-->
+    <!------------------------------------------CSS----------------------------------------->
+    <style>
+        body {
+            background-color: #000;
+            /* Couleur de fond par défaut en mode clair */
+        }
+
+        html {
+            font-family: Arial;
+            display: inline-block;
+            text-align: center;
+            line-height: 1px
+        }
+
+        a {
+            color: #EFEFEF;
+            text-decoration: underline
+        }
+
+        h2 {
+            font-size: 1.5rem
+        }
+
+        p {
+            font-size: 3.0rem
+        }
+
+        input {
+            background: #080a72;
+            font-size: 1.4rem;
+            font-weight: bold
+        }
+
+        .bouton {
+            font-size: 15px;
+            width: 100px;
+            height: 70px;
+            padding-bottom: 10px;
+            display: block;
+            font-weight: bold;
+            background: #6e1616
+                /* couleur du texte*/
+                /*background: #2eaf35; */
+                /* couleur du fond*/
+                /*border: #b13770*/
+        }
+
+
+        #aff_buttons_cam {
+            display: flex;
+            flex-direction: row
+            //padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .gros_bouton {
+            font-size: 15px;
+            width: 90px;
+            height: 50px;
+            padding-bottom: 10px;
+            display: block;
+            font-weight: bold;
+            background: #6e1616
+        }
+
+        .boutonMvmt {
+            font-size: 15px;
+            width: 150px;
+            height: 70px;
+            padding-bottom: 10px;
+            font-weight: bold;
+            background: #6e1616
+        }
+
+        button:hover {
+            background: #501617
+        }
+
+        button:active {
+            background: #4e0305
+        }
+
+        .Cmdes {
+            /*jaune*/
+            position: absolute;
+            background: #6b6801;
+            top: 10px;
+            left: 5px
+        }
+
+        .Pos_Init {
+            /*vert*/
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            background: #0d3f0d;
+            top: 10px;
+            left: 105px
+        }
+
+        .Pos_Vitesse {
+            /*rose*/
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            background: #72565b;
+            top: 10px;
+            left: 205px
+        }
+
+        .Pos_Mvments {
+            /*rouge*/
+            position: absolute;
+            background: #331111;
+            top: 380px;
+            left: 125px;
+            width: 400px
+        }
+
+        .Pos_Divers {
+            /*cyan*/
+            column-count: 2;
+            /*display: flex;
+              flex-flow: column wrap;*/
+            position: absolute;
+            background: #1b645e;
+            top: 10px;
+            left: 307px
+        }
+
+        .Pos_Mes_Analog {
+            /*vert*/
+            /*display: flex;
+            flex-direction: column;*/
+            background: #0d3f0d;
+            position: absolute;
+            top: 10px;
+            left: 540px;
+            width: 150px;
+            height: 450px;
+            text-align: left;
+            padding-left: 5px
+        }
+
+        .Pos_Mes_Analog_cam {
+          display: flex;
+          flex-direction: row;
+          color: darkred;
+          font-size: 40 px;
+          //background: #0d3f0d;
+          //position: absolute;
+          //top: 10px;
+          //left: 540px;
+          //width: 150px;
+          //height: 410px;
+          //text-align: left;
+          padding-left: 5px
+        }
+
+        .Pos_Cmd_Analog {
+            /*bleu*/
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            background: #080a72;
+            top: 450px;
+            left: 540px;
+            width: 140px
+        }
+
+        .Pos_Gris1 {
+            /*gris1*/
+            position: absolute;
+            background: grey;
+            top: 280px;
+            left: 140px;
+            width: 180px
+        }
+
+        .Pos_Gris2 {
+            /*gris2*/
+            position: absolute;
+            background: grey;
+            top: 280px;
+            left: 340px;
+            width: 180px
+        }
+
+        #cadre {
+            position: absolute;
+            /*display: flex;
+              flex-direction: row;*/
+            top: 0;
+            left: 700px;
+            width: 900px;
+            /* Largeur fixe de l'iframe */
+            height: 1000px
+        }
+
+        #menu {
+            flex-wrap: nowrap;
+            color: #EFEFEF;
+            width: 380px;
+            background: #363636;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: -10px;
+            margin-right: 10px
+        }
+
+        #live {
+          left: 0;  
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: nowrap;
+            line-height: 22px;
+            margin: 5px 0
+        }
+
+        .input-group>label {
+            display: inline-block;
+            padding-right: 10px;
+            min-width: 47%
+        }
+
+        .input-group input,
+        .input-group select {
+            flex-grow: 1
+        }
+
+        .range-max,
+        .range-min {
+            display: inline-block;
+            padding: 0 5px
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 0;
+            height: 22px;
+            background: #363636;
+            cursor: pointer;
+            margin: 0
+        }
+
+        input[type=range]:focus {
+            outline: 0
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 2px;
+            cursor: pointer;
+            background: #EFEFEF;
+            border-radius: 0;
+            border: 0 solid #EFEFEF
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            border: 1px solid rgba(0, 0, 30, 0);
+            height: 22px;
+            width: 22px;
+            border-radius: 50px;
+            background: #6e1616;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -11.5px
+        }
+
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #EFEFEF
+        }
+
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 2px;
+            cursor: pointer;
+            background: #EFEFEF;
+            border-radius: 0;
+            border: 0 solid #EFEFEF
+        }
+
+        input[type=range]::-moz-range-thumb {
+            border: 1px solid rgba(0, 0, 30, 0);
+            height: 22px;
+            width: 22px;
+            border-radius: 50px;
+            background: #6e1616;
+            cursor: pointer
+        }
+
+        input[type=range]::-ms-track {
+            width: 100%;
+            height: 2px;
+            cursor: pointer;
+            background: 0 0;
+            border-color: transparent;
+            color: transparent
+        }
+
+        input[type=range]::-ms-fill-lower {
+            background: #EFEFEF;
+            border: 0 solid #EFEFEF;
+            border-radius: 0
+        }
+
+        input[type=range]::-ms-fill-upper {
+            background: #EFEFEF;
+            border: 0 solid #EFEFEF;
+            border-radius: 0
+        }
+
+        input[type=range]::-ms-thumb {
+            border: 1px solid rgba(0, 0, 30, 0);
+            height: 22px;
+            width: 22px;
+            border-radius: 50px;
+            background: #6e1616;
+            cursor: pointer;
+            height: 2px
+        }
+
+        input[type=range]:focus::-ms-fill-lower {
+            background: #EFEFEF
+        }
+
+        input[type=range]:focus::-ms-fill-upper {
+            background: #363636
+        }
+
+        input[type=text] {
+            border: 1px solid #363636;
+            font-size: 14px;
+            height: 20px;
+            margin: 1px;
+            outline: 0;
+            border-radius: 5px
+        }
+    </style>
+</head>
+
+<!----------------------------------------Body + Script----------------------------------------->
+
+<body>
+    <div class="Cmdes">
+    <h2>Cmdes</h2>
+    <button onclick="sendCommand('parking nord')" class="bouton">parking nord</button>
+    <button onclick="sendCommand('parking sud')" class="bouton">parking sud</button>
+    <button onclick="sendCommand('suivit')" class="bouton">suivit</button>
+    <button onclick="sendCommand('pointage')" class="bouton">pointage</button>
+    <button onclick="sendCommand('arret')" class="bouton">arret</button>
+    <button onclick="sendCommand('EQ')" class="bouton">EQ</button>
+</div>
+
+<div class="Pos_Init">
+    <h2>Init</h2>
+    <button onclick="sendCommand('init parking nord')" class="bouton">init parking nord</button>
+    <button onclick="sendCommand('init parking sud')" class="bouton">init parking sud</button>
+    <button onclick="sendCommand('raz delta')" class="bouton">raz delta</button>
+</div>
+
+<div class="Pos_Vitesse">
+    <h2> vitesse </h2>
+    <button onclick="sendCommand('lent')" class="bouton">lent</button>
+    <button onclick="sendCommand('moyen')" class="bouton">moyen</button>
+    <button onclick="sendCommand('rapide')" class="bouton">rapide</button>
+</div>
+
+<div class="Pos_Mvments">
+    <h2>mouvements</h2>
+    <button onclick="sendCommand('haut')" class="boutonMvmt">haut</button>
+    <h5></h5>
+    <button onclick="sendCommand('gauche')" class="boutonMvmt">gauche</button>
+    <button onclick="sendCommand('droit')" class="boutonMvmt">droit</button>
+    <h5></h5>
+    <button onclick="sendCommand('bas')" class="boutonMvmt">bas</button>
+</div>
+
+<div class="Pos_Divers">
+    <h2>divers</h2>
+    <div>
+        <button onclick="sendCommand('cherche')" class="bouton">cherche</button>
+        <button onclick="sendCommand('360')" class="bouton">360</button>
+        <button onclick="sendCommand('zenith')" class="bouton">zenith</button>
+    </div>
+    <div>
+        <button onclick="sendCommand('tour')" class="bouton">tour</button>
+        <button onclick="sendCommand('raz GI1')" class="bouton">raz GI1</button>
+        <button onclick="sendCommand('+ xx')" class="bouton">+ xx</button>
+    </div>
+</div>
+
+
+
+    <div class="Pos_Cmd_Analog">
+        <h2>Input</h2>
+        <input type="text" onchange="FuncSendAna1(this)" id="SendAna1">
+        <input type="text" onchange="FuncSendAna2(this)" id="SendAna2">
+        <input type="text" onchange="FuncSendAna3(this)" id="SendAna3">
+        <input type="text" onchange="FuncSendAna4(this)" id="SendAna4">
+        <input type="text" onchange="FuncSendAna5(this)" id="SendAna5">
+        <input type="text" onchange="FuncSendAna6(this)" id="SendAna6">
+    </div>
+
+
+    <div class="Pos_Mes_Analog">
+        <h2>Output</h2>
+        <h5></h5><span>Val 1</span> <span id="vl1">0</span>
+        <h5></h5><span>Val 2</span> <span id="vl2">0</span>
+        <h5></h5><span>Val 3</span> <span id="vl3">0</span>
+        <h5></h5><span>Val 4</span> <span id="vl4">0</span>
+        <h5></h5><span>Val 5</span> <span id="vl5">0</span>
+        <h5></h5><span>Val 6</span> <span id="vl6">0</span>
+        <h5></h5><span>Val 7</span> <span id="vl7">0</span>
+        <h5></h5><span>Val 8</span> <span id="vl8">0</span>
+        <h5></h5><span>Val 9</span> <span id="vl9">0</span>
+        <h5></h5><span>Val10</span> <span id="vl10">0</span>
+        <h5></h5><span>Val11</span> <span id="vl11">0</span>
+        <h5></h5><span>Val12</span> <span id="vl12">0</span>
+        <h5></h5><span>Val13</span> <span id="vl13">0</span>
+        <h5></h5><span>-</span>
+        <h5></h5><span>Val20</span> <span id="vl20">0</span>
+        <h5></h5><span>Val21</span> <span id="vl21">0</span>
+        <h5></h5><span>Val22</span> <span id="vl22">0</span>
+     </div>
+
+    <div class="Pos_Gris1" style="height: 80px;width: 175px;">
+        <h5></h5><span>mode </span> <span id="vl17">0</span>
+        <h5></h5><span>Ref._azi</span> <span id="vl18">0</span>
+        <h5></h5><span>Ref._alt</span> <span id="vl19">0</span>
+    </div>
+
+    <div class="Pos_Gris2" style="height: 80px;width: 179px;">
+        <h5></h5><span>Vit.</span> <span id="vl14">0</span>
+        <h5></h5><span> Azi </span> <span id="vl15">0</span>
+        <h5></h5><span> Alt </span> <span id="vl16">0</span>
+    </div>
+
+    <div id="cadre">
+     
+    <section id="aff_buttons_cam">          
+    <button onclick="sendCommand('GetStill')" id="get-still" class="gros_bouton">Get Still</button>
+    <button onclick="sendCommand('DownFast')" id="down_fast" class="gros_bouton">Down Fast</button>
+    <button onclick="sendCommand('Down')" id="down" class="gros_bouton"> Down </button>
+    <button onclick="sendCommand('Up')" id="up" class="gros_bouton">Up</button>
+    <button onclick="sendCommand('UpFast')" id="up_fast" class="gros_bouton">Up Fast</button>
+    <button onclick="sendCommand('Excur')" id="excur" class="gros_bouton">Excur</button>
+    <button onclick="sendCommand('Stop')" id="stop" class="gros_bouton">Stop</button>
+    <button onclick="sendCommand('Raz5000')" id="Raz" class="gros_bouton">Raz 5000</button>
+</section>
+
+    <div class="Pos_Mes_Analog_cam">
+        <span>position act:  </span> <span id="Cam_Val1">0</span>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <!-- 5 non-breaking spaces -->
+        <span>RSSI:  </span> <span id="Cam_Val2">0</span>
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+        <span>  lampe val:  </span> <span id="Cam_Val3">0</span>   
+    </div>
+    <div class="input-group" id="lamp-group" title="Flashlight LED">
+        <label for="lamp">Light</label>
+        <div class="range-min">Off</div>
+        <input type="range" id="lamp" min="0" max="100" value="0" class="action-setting">
+        <div class="range-max">Full&#9888;</div>
+    </div>
+    <img id="cameraImage" alt="Image de la caméra">
+  </div>
+
+    <!---------------------------------------javascript---------------------------------------->
+    <script>
+       //const socket = new WebSocket('wss://flash-wild-ketchup.glitch.me');
+        const socket = new WebSocket('wss://camera9.glitch.me');  //('wss:
+        
+        socket.onopen = function(e) {
+            console.log("Connecté au WebSocket");
+        };
+        
+        socket.onmessage = function(event) {
+            // if (event.data.length < 100) {
+            //if (typeof event.data === 'string') {
+               
+                const data = JSON.parse(event.data);
+                //JSONobj = JSON.parse(event.data);
+                //console.log("Données capteurs reçues Json: ", event.data);
+                if (data) {  
+
+                //document.getElementById('temps_de_cycle').textContent = data.temps_de_cycle;    
+
+                document.getElementById('vl1').textContent = data.latitude;
+                document.getElementById('vl2').textContent = data.longitude;
+                document.getElementById('vl3').textContent = data.temps_de_cycle;
+                document.getElementById('vl4').textContent = data.getRAdec;
+                document.getElementById('vl5').textContent = data.getRAdec;
+                document.getElementById('vl7').textContent = data.Setpoint_azi;
+                document.getElementById('vl8').textContent = data.encoder_azi;
+                document.getElementById('vl9').textContent = data.Setpoint_alt;
+                document.getElementById('vl10').textContent = data.encoder_alt;
+                document.getElementById('vl11').textContent = data.minute;
+                document.getElementById('vl12').textContent = data.second_ms;
+                //document.getElementById('vl12').textContent = data.999;
+                //document.getElementById('vl13').textContent = data.;
+                document.getElementById('vl14').textContent = data.string_delta;
+                document.getElementById('vl15').textContent = data.consigne_azi;
+                document.getElementById('vl16').textContent = data.consigne_alt;
+                document.getElementById('vl17').textContent = data.mode;
+                document.getElementById('vl18').textContent = data.points_angle_azi;
+                document.getElementById('vl19').textContent = data.points_angle_alt;
+
+                
+                //document.getElementById('vl17').textContent = data. consigne_alt;
+                document.getElementById('vl20').textContent = data.rayon;
+                document.getElementById('vl21').textContent = data.WiFi_RSSI;
+                document.getElementById('vl22').textContent = data.WiFi_RSSI;
+
+
+
+              /*  }
+            } else {
+                //console.log("Image reçue, taille:", event.data.length, "bytes");
+
+                // Créer un Blob à partir des données binaires
+                const blob = new Blob([event.data], { type: 'image/jpeg' });
+
+                // Créer une URL pour le Blob
+                const imageUrl = URL.createObjectURL(blob);
+
+                // Afficher l'image
+                document.getElementById('cameraImage').src = imageUrl;
+
+                // Libérer la mémoire une fois l'image chargée
+                document.getElementById('cameraImage').onload = function() {
+                    URL.revokeObjectURL(this.src);
+                }
+
+                */
+            }
+            
+        };
+
+        function sendCommand(command) {
+            console.log("Envoi de la commande : " + command);
+            const message = JSON.stringify({command: command});
+            socket.send(message);
+        }
+/*
+
+                if (JSONobj.vl13 !== vl13ValueOld) {
+                    if (JSONobj.vl13 === "Up") {
+                        websockCam.send('Up');
+                    } else if (JSONobj.vl13 === "Down") {
+                        websockCam.send('Down');
+                    } else if (JSONobj.vl13 === "F_Up") {
+                        websockCam.send('UpFast');
+                    } else if (JSONobj.vl13 === "F_Down") {
+                        websockCam.send('DownFast');
+                    }
+                    vl13ValueOld = JSONobj.vl13;
+                }
+            }
+        }
+*/
+        //-----------------------------------------------------------------------------------
+        function FuncSendAna1(element) {
+            varana = "varana1=" + document.getElementById("SendAna1").value;
+            websock.send(varana);
+        }
+
+        //-----------------------------------------------------------------------------------
+        function FuncSendAna2(element) {
+            varana = "varana2=" + document.getElementById("SendAna2").value;
+            websock.send(varana);
+        }
+
+        //----------------------------------------------------------------------------------- 
+        function FuncSendAna3(element) {
+            varana = "varana3=" + document.getElementById("SendAna3").value;
+            websock.send(varana);
+        }
+
+        //-----------------------------------------------------------------------------------
+        function FuncSendAna4(element) {
+            varana = "varana4=" + document.getElementById("SendAna4").value;
+            websock.send(varana);
+        }
+
+        //-----------------------------------------------------------------------------------
+        function FuncSendAna5(element) {
+            varana = "varana5=" + document.getElementById("SendAna5").value;
+            websock.send(varana);
+        }
+
+        //-----------------------------------------------------------------------------------
+        function FuncSendAna6(element) {
+            varana = "varana6=" + document.getElementById("SendAna6").value;
+            websock.send(varana);
+        }
+
+        //----------------------------------------------------------------------------------- 
+        function FuncSendAna7(element) {
+            varana = "varana7=" + document.getElementById("SendAna7").value;
+            websock.send(varana);
+        }
+
+        //-----------------------------------------------------------------------------------
+        function FuncSendAna8(element) {
+            varana = "varana8=" + document.getElementById("SendAna8").value;
+            websock.send(varana);
+        }
+        // fin script origine
+/*
+  InitWebSocketCam()
+  function InitWebSocketCam() {
+    websockCam = new WebSocket('ws://192.168.79.101:83/');
+    websockCam.onmessage = function (evt) {
+      //console.log("evt.data",evt.data); // Affiche la réponse HTTP sur la console
+      JSONobj = JSON.parse(evt.data);
+      //console.log(JSONobj);
+
+      document.getElementById('Cam_Val1').innerHTML = JSONobj.Cam_Val1;  //reçues de l'espcam: position
+      document.getElementById('Cam_Val2').innerHTML = JSONobj.Cam_Val2;  //RSSI
+      document.getElementById('Cam_Val3').innerHTML = JSONobj.Cam_Val3;  //lampe val act
+    }
+  }
+*/
+
+
+  var rangeInput = document.getElementById('lamp');
+  // Ajout d'un écouteur d'événement sur le changement de la valeur du range
+  rangeInput.addEventListener('input', function() {
+      // Récupération de la valeur actuelle du range
+      var rangeValue = rangeInput.value;
+
+      // Affichage de la valeur dans la console (vous pouvez la stocker dans une variable si nécessaire)
+      //console.log('La valeur du range est maintenant :', rangeValue);
+      varanaCam = "varanaCam1=" + document.getElementById("lamp").value;
+      websockCam.send(varanaCam);
+   });
+   
+    </script>
+</body>
+
+</html>
