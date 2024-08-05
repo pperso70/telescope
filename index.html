@@ -461,11 +461,12 @@
 </section>
 
     <div class="Pos_Mes_Analog_cam">
-        <span>position act:  </span> <span id="Cam_Val1">0</span>
+        <span>position act:  </span> <span id="position">0</span>
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <!-- 5 non-breaking spaces -->
-        <span>RSSI:  </span> <span id="Cam_Val2">0</span>
+        <span>RSSI:  </span> <span id="rssi">0</span>
         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
-        <span>  lampe val:  </span> <span id="Cam_Val3">0</span>   
+        <span>  lampe val:  </span> <span id="lampe_val_act">0</span> 
+        <span>  T cycle:  </span> <span id="temps_de_cycle">0</span> 
     </div>
     <div class="input-group" id="lamp-group" title="Flashlight LED">
         <label for="lamp">Light</label>
@@ -508,7 +509,7 @@
                 document.getElementById('vl11').textContent = data.minute;
                 document.getElementById('vl12').textContent = data.second_ms;
                 //document.getElementById('vl12').textContent = data.999;
-                //document.getElementById('vl13').textContent = data.;
+                //document.getElementById('vl13').textContent = data.;   // transfert entre esp
                 document.getElementById('vl14').textContent = data.string_delta;
                 document.getElementById('vl15').textContent = data.consigne_azi;
                 document.getElementById('vl16').textContent = data.consigne_alt;
@@ -522,8 +523,11 @@
                 document.getElementById('vl21').textContent = data.WiFi_RSSI;
                 document.getElementById('vl22').textContent = data.WiFi_RSSI;
 
-
-
+                
+                document.getElementById('temps_de_cycle').textContent = data.temps_de_cycle;               
+                document.getElementById('position').textContent = data.position;
+                document.getElementById('rssi').textContent = data.rssi;
+                document.getElementById('lampe_val_act').textContent = data.lampe_val_act;
                 }
             } else {
                 //console.log("Image reçue, taille:", event.data.length, "bytes");
@@ -540,11 +544,8 @@
                 // Libérer la mémoire une fois l'image chargée
                 document.getElementById('cameraImage').onload = function() {
                     URL.revokeObjectURL(this.src);
-                }
-
-                
-            }
-            
+                }                
+            }            
         };
 
         function sendCommand(command) {
@@ -554,7 +555,7 @@
         }
 /*
 
-                if (JSONobj.vl13 !== vl13ValueOld) {
+                if (JSONobj.vl13 !== vl13ValueOld) {   //  pour transfert entre esp
                     if (JSONobj.vl13 === "Up") {
                         websockCam.send('Up');
                     } else if (JSONobj.vl13 === "Down") {
